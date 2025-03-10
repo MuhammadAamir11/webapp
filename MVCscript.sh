@@ -57,24 +57,24 @@ echo "Copying files to Azure VM"
 #9️ Create & Register a systemd Service
 ssh azureuser@$PUBLIC_IP << 'ENDSSH'
     sudo tee /etc/systemd/system/myapp.service > /dev/null <<EOF
-   [Unit]
-Description=ASP.NET Web App running on Ubuntu
-After=network.target
+    [Unit]
+    Description=ASP.NET Web App running on Ubuntu
+    After=network.target
 
-[Service]
-WorkingDirectory=/home/azureuser/webapp
-ExecStart=/usr/bin/dotnet /home/azureuser/webapp/webapp.dll --urls http://0.0.0.0:5000
-Restart=always
-RestartSec=10
-KillSignal=SIGINT
-SyslogIdentifier=myapp
-User=azureuser
-Environment=ASPNETCORE_ENVIRONMENT=Production
-Environment=DOTNET_ROOT=/usr/share/dotnet
-Environment=DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+    [Service]
+    WorkingDirectory=/home/azureuser/webapp
+    ExecStart=/usr/bin/dotnet /home/azureuser/webapp/webapp.dll --urls http://0.0.0.0:5000
+    Restart=always
+    RestartSec=10
+    KillSignal=SIGINT
+    SyslogIdentifier=myapp
+    User=azureuser
+    Environment="ASPNETCORE_ENVIRONMENT=Production"
+    Environment="DOTNET_ROOT=/usr/share/dotnet"
+    Environment="DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1"
 
-[Install]
-WantedBy=multi-user.target
+    [Install]
+    WantedBy=multi-user.target
     EOF
 ENDSSH
 
