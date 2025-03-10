@@ -39,7 +39,7 @@ dotnet new mvc --force
 INDEX_FILE="Views/Home/Index.cshtml"
 
 if [ -f "$INDEX_FILE" ]; then
-  sed -i 's/<h1 class="display-4">Welcome<\/h1>/<h1 class="display-4">Welcome to Muhammad's MVC WebApp<\/h1>/g' "$INDEX_FILE"
+  sed -i 's/<h1 class="display-4">Welcome<\/h1>/<h1 class="display-4">Welcome to Muhammads MVC WebApp<\/h1>/g' "$INDEX_FILE"
   echo "Updated Index.cshtml with custom welcome message."
 else
   echo "Error: $INDEX_FILE not found!"
@@ -80,9 +80,28 @@ ENDSSH
 
 #10  Activate the Service
 ssh azureuser@$PUBLIC_IP << 'ENDSSH'
+    # Reload systemd to recognize any changes
     sudo systemctl daemon-reload
+
+    # Ensure the service is enabled on startup
     sudo systemctl enable myapp.service
-    sudo systemctl start myapp.service
+
+    # Check if myapp.service is already running
+    if sudo systemctl is-active --quiet myapp.service; then
+        echo "Service is already running. Restarting it..."
+        sudo systemctl restart myapp.service
+    else
+        echo "Starting the service..."
+        sudo systemctl start myapp.service
+    fi
+
+    # Check if port 5000 is still occupied after restart
+    if sudo ss -tulnp | grep -q ':5000'; then
+        echo "Port 5000 is still in use. Killing existing process..."
+        sudo fuser -k 5000/tcp
+        sudo systemctl restart myapp.service
+    fi
+
     echo "Systemd Service Started"
 ENDSSH
 
