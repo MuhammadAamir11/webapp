@@ -39,7 +39,7 @@ dotnet new mvc --force
 INDEX_FILE="Views/Home/Index.cshtml"
 
 if [ -f "$INDEX_FILE" ]; then
-  sed -i 's/<h1 class="display-4">Welcome<\/h1>/<h1 class="display-4">Welcome to Muhammad MVC WebApp<\/h1>/g' "$INDEX_FILE"
+  sed -i 's/<h1 class="display-4">Welcome<\/h1>/<h1 class="display-4">Welcome to Muhammad's MVC WebApp<\/h1>/g' "$INDEX_FILE"
   echo "Updated Index.cshtml with custom welcome message."
 else
   echo "Error: $INDEX_FILE not found!"
